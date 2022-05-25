@@ -4,10 +4,12 @@ create table forms (
   slug text,
   title text,
   description text,
-  exposure text default 'optional', -- 'public' | 'private' | 'optional'
+  exposure text default 'choose', -- 'public' | 'private' | 'choose'
 
   unique(slug)
 );
+
+alter table forms add column allow_tweet boolean default true;
 
 create table feedbacks (
   id uuid not null primary key default uuid_generate_v4(),

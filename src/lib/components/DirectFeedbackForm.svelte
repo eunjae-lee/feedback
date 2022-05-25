@@ -40,7 +40,7 @@
 <form on:submit|preventDefault={onSubmit}>
 	<div class="form-control w-full">
 		<label class="label" for="feedback">
-			<span class="label-text">피드백</span>
+			<span class="label-text">내용</span>
 		</label>
 		<textarea name="feedback" bind:value={feedback} class="textarea w-full" required />
 	</div>
@@ -60,13 +60,13 @@
 	</div>
 
 	{#if exposure === 'public'}
-		<p class="ml-1 text-sm">피드백이 웹사이트에 공개됩니다.</p>
+		<p class="mt-2 ml-1 text-sm">등록된 정보는 웹사이트에 공개됩니다.</p>
 	{:else if exposure === 'private'}
-		<p class="ml-1 text-sm">피드백은 비공개로 저에게만 공유됩니다.</p>
-	{:else if exposure === 'optional'}
+		<p class="mt-2 ml-1 text-sm">등록된 정보는 비공개로 저에게만 공유됩니다.</p>
+	{:else if exposure === 'choose'}
 		<div class="mt-2 form-control w-full">
 			<label class="cursor-pointer label">
-				<span class="label-text">피드백을 웹사이트에 공개해도 괜찮습니다.</span>
+				<span class="label-text">등록된 정보는 웹사이트에 공개해도 괜찮습니다.</span>
 				<input
 					type="checkbox"
 					name="isPublic"

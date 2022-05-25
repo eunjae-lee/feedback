@@ -1,5 +1,6 @@
-import type { Form } from '../types';
+import type { Feedback, Form } from '../types';
 import { createClient } from '@supabase/supabase-js';
+import fetch from 'isomorphic-unfetch';
 
 const supabase = createClient(
 	import.meta.env.VITE_SUPABASE_URL,
@@ -51,6 +52,7 @@ export async function post({ request }) {
 	}
 
 	const { error } = await supabase.from<Feedback>('feedbacks').insert([payload]);
+	await sendToDiscord({ payload });
 
 	return error
 		? {
@@ -60,4 +62,36 @@ export async function post({ request }) {
 		: {
 				status: 200
 		  };
+}
+
+async function sendToDiscord({ payload }: { payload: any }) {
+	const webhook = (import.meta.env.VITE_DISCORD_WEBHOOK ||
+		process.env.VITE_DISCORD_WEBHOOK) as string;
+
+	const { data } = await supabase
+		.from<Form>('forms')
+		.select('*')
+		.eq('id', payload.form_id)
+		.single();
+
+	try {
+		await fetch(webhook, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				embeds: [
+					{
+						title: data?.title,
+						fields: Object.entries(payload)
+							.filter((entry) => entry[1])
+							.map((entry) => ({ name: entry[0], value: entry[1] }))
+					}
+				]
+			})
+		});
+	} catch (err) {
+		console.error(err);
+	}
 }

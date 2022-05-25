@@ -4,7 +4,7 @@
 	export let result: SubmitResult;
 </script>
 
-{#if result.success === true}
+{#if result && result.success === true}
 	<div class="mt-4 alert alert-success shadow-lg">
 		<div>
 			<svg
@@ -24,7 +24,7 @@
 	</div>
 {/if}
 
-{#if result.success !== true}
+{#if result && result.success !== true}
 	<div class="mt-4 alert alert-error shadow-lg">
 		<div>
 			<svg

@@ -129,6 +129,7 @@ export interface paths {
           title?: parameters["rowFilter.forms.title"];
           description?: parameters["rowFilter.forms.description"];
           exposure?: parameters["rowFilter.forms.exposure"];
+          allow_tweet?: parameters["rowFilter.forms.allow_tweet"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -184,6 +185,7 @@ export interface paths {
           title?: parameters["rowFilter.forms.title"];
           description?: parameters["rowFilter.forms.description"];
           exposure?: parameters["rowFilter.forms.exposure"];
+          allow_tweet?: parameters["rowFilter.forms.allow_tweet"];
         };
         header: {
           /** Preference */
@@ -203,6 +205,7 @@ export interface paths {
           title?: parameters["rowFilter.forms.title"];
           description?: parameters["rowFilter.forms.description"];
           exposure?: parameters["rowFilter.forms.exposure"];
+          allow_tweet?: parameters["rowFilter.forms.allow_tweet"];
         };
         body: {
           /** forms */
@@ -266,8 +269,16 @@ export interface definitions {
     title?: string;
     /** Format: text */
     description?: string;
-    /** Format: text */
+    /**
+     * Format: text
+     * @default choose
+     */
     exposure?: string;
+    /**
+     * Format: boolean
+     * @default true
+     */
+    allow_tweet?: boolean;
   };
 }
 
@@ -334,6 +345,8 @@ export interface parameters {
   "rowFilter.forms.description": string;
   /** Format: text */
   "rowFilter.forms.exposure": string;
+  /** Format: boolean */
+  "rowFilter.forms.allow_tweet": string;
 }
 
 export interface operations {}

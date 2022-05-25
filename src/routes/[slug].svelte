@@ -2,9 +2,9 @@
 	import type { LoadInput } from '@sveltejs/kit';
 
 	export async function load({ props }: LoadInput) {
-		const { id, title, description, exposure } = props.data;
+		const { id, title, description, exposure, allow_tweet: allowTweet } = props.data;
 		return {
-			props: { formId: id, title, description, exposure }
+			props: { formId: id, title, description, exposure, allowTweet }
 		};
 	}
 </script>
@@ -18,8 +18,13 @@
 	export let title: string;
 	export let description: string;
 	export let exposure: Exposure;
+	export let allowTweet: boolean;
 
 	let feedbackType: 'tweet' | 'direct';
+
+	if (!allowTweet) {
+		feedbackType = 'direct';
+	}
 
 	let mode: 'introduction' | 'form' = 'introduction';
 	function showForm() {
@@ -43,35 +48,37 @@
 			{/if}
 
 			{#if mode === 'form'}
-				<p class="mt-8 font-bold">혹시, 이미 트위터에 올리셨나요?</p>
-				<div class="form-control mt-2">
-					<label class="p-0 cursor-pointer label">
-						<input
-							type="radio"
-							class="radio"
-							bind:group={feedbackType}
-							name="feedback_type"
-							value={'tweet'}
-						/>
-						<span class="label-text">네, 트윗 URL 붙여넣을게요.</span>
-					</label>
-				</div>
-				{#if feedbackType === 'tweet'}
-					<TweetFeedbackForm {formId} />
-				{/if}
+				{#if allowTweet}
+					<p class="mt-8 font-bold">혹시, 이미 트위터에 올리셨나요?</p>
+					<div class="form-control mt-2">
+						<label class="p-0 cursor-pointer label">
+							<input
+								type="radio"
+								class="radio"
+								bind:group={feedbackType}
+								name="feedback_type"
+								value={'tweet'}
+							/>
+							<span class="label-text">네, 트윗 URL 붙여넣을게요.</span>
+						</label>
+					</div>
+					{#if feedbackType === 'tweet'}
+						<TweetFeedbackForm {formId} />
+					{/if}
 
-				<div class="form-control mt-2">
-					<label class="p-0 cursor-pointer label">
-						<input
-							type="radio"
-							class="radio"
-							bind:group={feedbackType}
-							name="feedback_type"
-							value={'direct'}
-						/>
-						<span class="label-text">아뇨, 여기서 작성할게요.</span>
-					</label>
-				</div>
+					<div class="form-control mt-2">
+						<label class="p-0 cursor-pointer label">
+							<input
+								type="radio"
+								class="radio"
+								bind:group={feedbackType}
+								name="feedback_type"
+								value={'direct'}
+							/>
+							<span class="label-text">아뇨, 여기서 작성할게요.</span>
+						</label>
+					</div>
+				{/if}
 				{#if feedbackType === 'direct'}
 					<DirectFeedbackForm {formId} {exposure} />
 				{/if}
