@@ -1,4 +1,4 @@
-import { definitions } from './supabase';
+import type { definitions } from './supabase';
 
 export type Form = definitions['forms'];
 
