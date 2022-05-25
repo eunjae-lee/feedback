@@ -1,8 +1,29 @@
 <script lang="ts">
-	function handleSubmit(e) {
-		const formData = new FormData(e.target);
-		const url = formData.get('url');
-		console.log('# handleSubmit', url);
+	import { submitTweet, type SubmitResult } from '$lib/submit';
+
+	import ResultBanner from './ResultBanner.svelte';
+
+	export let formId: string;
+	let url: string;
+	let result: SubmitResult;
+
+	async function handleSubmit() {
+		submitTweet({
+			api: window.location.href,
+			formId,
+			url
+		})
+			.then(async (response) => {
+				if (response.ok) {
+					result = { success: true };
+				} else {
+					result = { error: await response.text() };
+				}
+			})
+			.catch((error) => {
+				result = { error };
+				throw error;
+			});
 	}
 </script>
 
@@ -10,8 +31,16 @@
 	<input
 		type="url"
 		name="url"
+		bind:value={url}
 		placeholder="https://twitter.com/..."
 		class="input w-full max-w-xs"
 	/>
-	<button type="submit" class="btn btn-primary">등록</button>
+
+	{#if result === undefined}
+		<button type="submit" class="btn btn-primary">등록</button>
+	{/if}
 </form>
+
+{#if result === undefined}
+	<ResultBanner {result} />
+{/if}
