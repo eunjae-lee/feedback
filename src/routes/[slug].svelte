@@ -32,6 +32,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{title} | 이은재</title>
+</svelte:head>
+
 <div class="container mx-auto flex justify-center">
 	<div class="my-8 mx-4 card w-96 lg:w-1/3 bg-base-200 shadow-xl">
 		<!-- svelte-ignore a11y-img-redundant-alt -->
