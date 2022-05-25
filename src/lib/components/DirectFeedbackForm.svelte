@@ -11,8 +11,11 @@
 	let name: string;
 	let url: string;
 	let isPublic: boolean;
-
 	let result: SubmitResult;
+
+	if (exposure === 'choose') {
+		isPublic = true;
+	}
 
 	function onSubmit() {
 		submitDirectFeedback({
