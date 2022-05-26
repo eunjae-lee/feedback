@@ -6,8 +6,10 @@
 	export let formId: string;
 	let url: string;
 	let result: SubmitResult;
+	let isSubmitting: boolean;
 
 	async function handleSubmit() {
+		isSubmitting = true;
 		submitTweet({
 			api: window.location.href,
 			formId,
@@ -23,6 +25,9 @@
 			.catch((error) => {
 				result = { error };
 				throw error;
+			})
+			.finally(() => {
+				isSubmitting = false;
 			});
 	}
 </script>
@@ -37,10 +42,13 @@
 	/>
 
 	{#if result === undefined}
-		<button type="submit" class="btn btn-primary">등록</button>
+		<button
+			type="submit"
+			disabled={isSubmitting}
+			class:loading={isSubmitting}
+			class="btn btn-primary">등록</button
+		>
 	{/if}
 </form>
 
-{#if result === undefined}
-	<ResultBanner {result} />
-{/if}
+<ResultBanner {result} />

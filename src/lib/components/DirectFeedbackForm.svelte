@@ -12,12 +12,14 @@
 	let url: string;
 	let isPublic: boolean;
 	let result: SubmitResult;
+	let isSubmitting: boolean;
 
 	if (exposure === 'choose') {
 		isPublic = true;
 	}
 
 	function onSubmit() {
+		isSubmitting = true;
 		submitDirectFeedback({
 			api: window.location.href,
 			formId,
@@ -36,6 +38,9 @@
 			.catch((error) => {
 				result = { error };
 				throw error;
+			})
+			.finally(() => {
+				isSubmitting = false;
 			});
 	}
 </script>
@@ -84,7 +89,12 @@
 
 	{#if result === undefined}
 		<div class="mt-4 flex justify-end">
-			<button type="submit" class="btn btn-primary">등록</button>
+			<button
+				type="submit"
+				disabled={isSubmitting}
+				class:loading={isSubmitting}
+				class="btn btn-primary">등록</button
+			>
 		</div>
 	{/if}
 </form>
